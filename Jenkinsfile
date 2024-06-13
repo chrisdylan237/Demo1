@@ -68,7 +68,7 @@ pipeline {
             }
         }
         
-        stage('Delete application') {
+        stage('Delete application and docker-compose file') {
             when {
                 expression {
                     params.delete_application == true
@@ -77,6 +77,7 @@ pipeline {
             steps {
                 script {
                     sh "sshpass -p '${params.password}' ssh -o StrictHostKeyChecking=no ${params.username}@${params.server_dns} 'sudo docker-compose down --rmi all --volumes --remove-orphans'"
+                    sh "sshpass -p '${params.password}' ssh -o StrictHostKeyChecking=no ${params.username}@${params.server_dns} 'sudo rm -rf *'"
                 }
             }
         }
